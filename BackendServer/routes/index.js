@@ -6,11 +6,13 @@ const transactionsRouter = require("../lib/api/Transactions")
 const balanceRouter = require("../lib/api/Balance");
 const beneficiaryRouter = require("../lib/api/Beneficiary");
 const userRouter = require("../lib/api/User");
+const checkRouter = require("../lib/api/Auth")
 
 router.use("/balance", balanceRouter);
 router.use("/transactions", transactionsRouter)
 router.use("/health", healthRouter);
 router.use("/beneficiary", beneficiaryRouter);
 router.use("/user", userRouter);
+router.use("/auth", checkRouter);
 
 module.exports = router;
