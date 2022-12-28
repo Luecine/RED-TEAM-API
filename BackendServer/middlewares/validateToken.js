@@ -109,7 +109,7 @@ const validateAdminToken = function(req, res, next) {
     });
 };
 
-const tokenCheck = function (req, res, next) {
+const admCheck = function (req, res, next) {
     var r = new Response();
 
     const authHeader = req.headers["authorization"];
@@ -141,8 +141,51 @@ const tokenCheck = function (req, res, next) {
     })
 }
 
+const tokenCheck = function(req, res, next) {
+    var r = new Response();
+  
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+  
+    if (token == null) {
+        r.status = statusCodes.NOT_AUTHORIZED;
+        r.data = {
+          "message": "Not authorized"
+        }
+        return res.json(r);
+    }
+  
+    jwt.verify(token, "secret", (err, data) => {
+        if (err) {
+            r.status = statusCodes.FORBIDDEN;
+            r.data = {
+                "message": err.toString()
+            }
+            return res.json(r);
+        }
+        
+        Model.users.findOne({
+            where: {
+                username: data.username
+            },
+            attributes: ["account_number"]
+        }).then((data) => {
+            req.account_number = data.account_number;
+            next();
+        }).catch((err) => {
+          r.status = statusCodes.SERVER_ERROR;
+          r.data = {
+              "message": err.toString()
+          };
+          return res.json(r);
+      });
+    });
+  };
+  
+
 module.exports =  {
     validateUserToken,
     validateAdminToken,
+    admCheck,
     tokenCheck
 }
