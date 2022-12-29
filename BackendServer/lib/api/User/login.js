@@ -30,7 +30,7 @@ router.post('/', decryptRequest, (req, res) => {
             const accessToken = jwt.sign({
                 username: data.username,
                 is_admin: data.is_admin
-            }, "secret");
+            }, "secret",{expiresIn: "30m"});
             r.status = statusCodes.SUCCESS;
             r.data = {
                 "accessToken": accessToken
