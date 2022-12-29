@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "root",
-    "password": "1234",
+    "username": "eggmoney",
+    "password": "eggmoney",
     "database": "dvba",
-    "host": "127.0.0.1",
+    "host": "mysql.c0vdjgovqm2u.ap-northeast-2.rds.amazonaws.com",
     "dialect": "mysql"
   },
   "test": {
