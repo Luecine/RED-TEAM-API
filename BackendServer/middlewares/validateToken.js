@@ -109,12 +109,14 @@ const validateAdminToken = function(req, res, next) {
     });
 };
 
-const tokenCheck = function (req, res, next) {
-    var r = new Response();
 
+ 
+const admCheck = function(req, res, next) {
+    var r = new Response();
+  
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
-
+  
     if (token == null) {
         r.status = statusCodes.NOT_AUTHORIZED;
         r.data = {
@@ -122,7 +124,7 @@ const tokenCheck = function (req, res, next) {
         }
         return res.json(r);
     }
-
+  
     jwt.verify(token, "secret", (err, data) => {
         if (err) {
             r.status = statusCodes.FORBIDDEN;
@@ -131,18 +133,110 @@ const tokenCheck = function (req, res, next) {
             }
             return res.json(r);
         }
-        else{
-            r.status = statusCodes.SUCCESS;
-            r.data = {
-                "message": data.is_admin
+        
+        Model.users.findOne({
+            where: {
+                username: data.username
+            },
+            attributes: ["account_number", "is_admin"]
+        }).then((data) => {
+            req.account_number = data.account_number;
+            if (!data.is_admin) {
+                r.status = statusCodes.FORBIDDEN;
+                r.data = {
+                    "message": "Exclusive endpoint for admins only"
+                };
+                return res.json(r);
+            } else {
+                next();
             }
-            return res.json(r)
+        }).catch((err) => {
+            r.status = statusCodes.SERVER_ERROR;
+            r.data = {
+                "message": err.toString()
+            };
+            return res.json(r);
+        });
+    });
+};
+
+// const admCheck = function (req, res, next) {
+//     var r = new Response();
+
+//     const authHeader = req.headers["authorization"];
+//     const token = authHeader && authHeader.split(" ")[1];
+
+//     if (token == null) {
+//         r.status = statusCodes.NOT_AUTHORIZED;
+//         r.data = {
+//             "message": "Not authorized"
+//         }
+//         return res.json(r);
+//     }
+
+//     jwt.verify(token, "secret", (err, data) => {
+//         if (err) {
+//             r.status = statusCodes.FORBIDDEN;
+//             r.data = {
+//                 "message": err.toString()
+//             }
+//             return res.json(r);
+//         }
+//         else{
+//             r.status = statusCodes.SUCCESS;
+//             r.data = {
+//                 "message": data.is_admin
+//             }
+//             return res.json(r)
+//         }
+//     })
+// }
+
+const tokenCheck = function(req, res, next) {
+    var r = new Response();
+  
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+  
+    if (token == null) {
+        r.status = statusCodes.NOT_AUTHORIZED;
+        r.data = {
+          "message": "Not authorized"
         }
-    })
-}
+        return res.json(r);
+    }
+  
+    jwt.verify(token, "secret", (err, data) => {
+        if (err) {
+            r.status = statusCodes.FORBIDDEN;
+            r.data = {
+                "message": err.toString()
+            }
+            return res.json(r);
+        }
+        
+        Model.users.findOne({
+            where: {
+                username: data.username
+            },
+            attributes: ["account_number"]
+        }).then((data) => {
+            req.account_number = data.account_number;
+            next();
+        }).catch((err) => {
+          r.status = statusCodes.SERVER_ERROR;
+          r.data = {
+              "message": err.toString()
+          };
+          return res.json(r);
+      });
+    });
+  };
+  
 
 module.exports =  {
     validateUserToken,
     validateAdminToken,
+    admCheck,
     tokenCheck
 }
