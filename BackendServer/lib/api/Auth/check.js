@@ -6,13 +6,13 @@ const statusCodes = require("../../statusCodes");
 
 router.get("/",[tokenCheck], (req, res) => {
     var r = new Response();
-    let {is_admin} = req.body
-
+    let {is_user} = req.body
+    
     r.status = statusCodes.SUCCESS;
     r.data = {
-        "message": is_admin
+        "message": is_user
     }
-
+    console.log(r.data);
     return res.json(r);
 })
 
