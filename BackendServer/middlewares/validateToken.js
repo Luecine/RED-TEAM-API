@@ -2,8 +2,7 @@ const Model = require("../models/index");
 const Response = require('../lib/Response');
 const statusCodes = require("../lib/statusCodes");
 const jwt = require("jsonwebtoken");
-var { encryptResponse } = require("../middlewares/crypt");
-
+var { encryptResponse, decryptEnc } = require("../middlewares/crypt");
 /**
  * User token validation middleware
  * This middleware validates user JWT token, extracts the associated
@@ -115,7 +114,7 @@ const admCheck = function(req, res, next) {
     var r = new Response();
   
     const authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1];
+    var token = decryptEnc(authHeader);
   
     if (token == null) {
         r.status = statusCodes.NOT_AUTHORIZED;
@@ -148,6 +147,7 @@ const admCheck = function(req, res, next) {
                 };
                 return res.json(r);
             } else {
+                console.log(req);
                 next();
             }
         }).catch((err) => {
@@ -160,44 +160,12 @@ const admCheck = function(req, res, next) {
     });
 };
 
-// const admCheck = function (req, res, next) {
-//     var r = new Response();
-
-//     const authHeader = req.headers["authorization"];
-//     const token = authHeader && authHeader.split(" ")[1];
-
-//     if (token == null) {
-//         r.status = statusCodes.NOT_AUTHORIZED;
-//         r.data = {
-//             "message": "Not authorized"
-//         }
-//         return res.json(r);
-//     }
-
-//     jwt.verify(token, "secret", (err, data) => {
-//         if (err) {
-//             r.status = statusCodes.FORBIDDEN;
-//             r.data = {
-//                 "message": err.toString()
-//             }
-//             return res.json(r);
-//         }
-//         else{
-//             r.status = statusCodes.SUCCESS;
-//             r.data = {
-//                 "message": data.is_admin
-//             }
-//             return res.json(r)
-//         }
-//     })
-// }
-
 const tokenCheck = function(req, res, next) {
     var r = new Response();
   
-    const authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1];
-  
+    var authHeader = req.headers["authorization"];
+    console.log(authHeader)
+    var token = decryptEnc(authHeader);
     if (token == null) {
         r.status = statusCodes.NOT_AUTHORIZED;
         r.data = {
@@ -222,6 +190,7 @@ const tokenCheck = function(req, res, next) {
             attributes: ["account_number"]
         }).then((data) => {
             req.account_number = data.account_number;
+            req.is_user = true
             next();
         }).catch((err) => {
           r.status = statusCodes.SERVER_ERROR;
