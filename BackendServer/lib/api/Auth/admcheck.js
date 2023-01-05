@@ -6,7 +6,7 @@ const statusCodes = require("../../statusCodes");
 
 router.get("/",[admCheck], (req, res) => {
     var r = new Response();
-    let {is_admin} = req.body
+    let {is_admin} = req
 
     r.status = statusCodes.SUCCESS;
     r.data = {

@@ -165,6 +165,7 @@ const tokenCheck = function(req, res, next) {
   
     var authHeader = req.headers["authorization"];
     var token = decryptEnc(authHeader);
+
     if (token == null) {
         r.status = statusCodes.NOT_AUTHORIZED;
         r.data = {
