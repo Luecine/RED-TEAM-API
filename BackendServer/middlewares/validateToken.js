@@ -147,7 +147,7 @@ const admCheck = function(req, res, next) {
                 };
                 return res.json(r);
             } else {
-                console.log(req);
+                req.is_admin = true;
                 next();
             }
         }).catch((err) => {
@@ -164,7 +164,6 @@ const tokenCheck = function(req, res, next) {
     var r = new Response();
   
     var authHeader = req.headers["authorization"];
-    console.log(authHeader)
     var token = decryptEnc(authHeader);
     if (token == null) {
         r.status = statusCodes.NOT_AUTHORIZED;
