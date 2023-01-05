@@ -42,10 +42,12 @@ create table qna
     userId    varchar(30),
     title     VARCHAR(255),
     content   VARCHAR(255),
+    filepath   VARCHAR(255),
     createdAt DATETIME,
     updatedAt DATETIME,
     PRIMARY KEY (id)
 ) engine = innodb;
 
-INSERT INTO `users` values (default, "123", "123", 111111, default, default);
-INSERT INTO `users` values (default, "admin", "admin", 999999, default, true);
+
+INSERT INTO `users`
+values (default, "admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", 999999, default, true);
