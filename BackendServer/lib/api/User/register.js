@@ -13,12 +13,14 @@ var { encryptResponse, decryptRequest } = require("../../../middlewares/crypt");
  * @middleware                       - Checks admin authorization
  * @param username                   - Username to login
  * @param password                   - Password to login
+ * @param email                      - email
  * @return                           - Status
  */
 router.post('/', decryptRequest, (req, res) => {
     var r = new Response();
     let username = req.body.username;
     let password = req.body.password;
+    let email = req.body.email;
     let account_number = Math.random() * 888888 + 111111;
     
     Model.users.findAll({
@@ -38,6 +40,7 @@ router.post('/', decryptRequest, (req, res) => {
                 Model.users.create({
                     username: username,
                     password: password,
+                    email: email,
                     account_number: account_number
                 }).then(() => {
                     r.status = statusCodes.SUCCESS;
