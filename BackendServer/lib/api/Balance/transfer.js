@@ -20,7 +20,8 @@ router.post('/', [validateUserToken, decryptRequest], (req, res) => {
     let from_account = req.account_number;
     let to_account = req.body.to_account;
     let amount = req.body.amount;
-
+    let sendtime = req.body.sendtime;
+    console.log(sendtime);
     Model.users.findOne({
         where: {
             account_number: from_account
@@ -42,7 +43,8 @@ router.post('/', [validateUserToken, decryptRequest], (req, res) => {
                             Model.transactions.create({
                                 from_account: from_account,
                                 to_account: to_account,
-                                amount: amount
+                                amount: amount,
+                                sendtime: sendtime
                             }).then(()=>{
                                 Model.users.update({
                                     balance: Sequelize.literal(`balance - ${amount}`)

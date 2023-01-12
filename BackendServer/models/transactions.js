@@ -16,6 +16,10 @@ module.exports = function(sequelize, DataTypes) {
         amount: {
             type: DataTypes.INTEGER,
             allowNull: false
+        },
+        sendtime: {
+            type: DataTypes.DATE,
+            allowNull: false
         }
     }, {
         timestamps: false
