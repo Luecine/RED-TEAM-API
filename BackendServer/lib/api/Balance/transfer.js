@@ -22,6 +22,13 @@ router.post('/', [validateUserToken, decryptRequest], (req, res) => {
     let amount = req.body.amount;
     let sendtime = req.body.sendtime;
     console.log(sendtime);
+    if(amount < 0){
+        r.status = statusCodes.BAD_INPUT;
+        r.data = {
+            "message": "Must Be Positive Number"
+        }
+        return res.json(encryptResponse(r));
+    }else{
     Model.users.findOne({
         where: {
             account_number: from_account
@@ -109,7 +116,7 @@ router.post('/', [validateUserToken, decryptRequest], (req, res) => {
             "message": err.toString()
         };
         res.json(encryptResponse(r));
-    });
+    });}
 });
 
 module.exports = router;
