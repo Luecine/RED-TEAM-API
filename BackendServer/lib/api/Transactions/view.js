@@ -24,7 +24,7 @@ router.post('/', validateUserToken, (req, res) => {
                 { to_account: account_number }
             ],
         },
-        attributes: ["from_account", "to_account", "amount"]
+        attributes: ["from_account", "to_account", "amount", "time"]
     }).then((transactions) => {
         r.status = statusCodes.SUCCESS;
         r.data = transactions;
