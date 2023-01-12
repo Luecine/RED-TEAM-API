@@ -1,17 +1,14 @@
 var express = require('express');
 var router = express.Router();
-var Response = require('../../Response');
-const statusCodes = require("../../statusCodes");
+
 router.get("/", (req, res) => {
-    var r = new Response();
     const username = req.body.username
     const account_number = req.body.account_number
     const balance = req.body.balance
     const rest = req.body.rest
     const is_admin = req.body.is_admin
 
-    r.status = statusCodes.SUCCESS;
-    r.data = "<!DOCTYPE html>\n" +
+    const data = "<!DOCTYPE html>\n" +
         "<html lang=\"en\">\n" +
         "\n" +
         "<head>\n" +
@@ -566,7 +563,7 @@ router.get("/", (req, res) => {
     "</body>\n" +
     "\n"
 
-    return res.json(r)
+    return res.json(data)
 })
 
 module.exports = router;
