@@ -12,7 +12,6 @@ var { encryptResponse, decryptEnc } = require("../middlewares/crypt");
  */
 const validateUserToken = function(req, res, next) {
   var r = new Response();
-
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
