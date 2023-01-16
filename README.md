@@ -1,9 +1,7 @@
-<h1 align="center">Damn Vulnerable Bank</h1>
+<h1 align="center">EGGMONEYBANK API SERVER</h1>
 
 <p align="center">
-  <a href="https://github.com/rewanthtammana/Damn-Vulnerable-Bank/fork">
-    <img src="https://img.shields.io/github/forks/rewanthtammana/Damn-Vulnerable-Bank">
-  </a>
+  <h2>DVWA API Modified by 어나니머쓱, Respectfully shared by rewanthtammana </h2>
   <a href="https://github.com/rewanthtammana/Damn-Vulnerable-Bank/stargazers">
     <img src="https://img.shields.io/github/stars/rewanthtammana/Damn-Vulnerable-Bank">
   </a>
